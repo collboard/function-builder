@@ -1,28 +1,29 @@
 {
-  "name": "@collboard/function-builder",
-  "version": "1.0.0",
-  "description": "Project started at Robothon 2021 as a first external module for Collboard.com",
-  "contributors": [
-      "Pavol Hejný <me@pavolhejny.com> (https://pavolhejny.com)",
-      "Jonáš Rosecký <jonas.rosecky@h-edu.cz> (https://xrosecky.cz)"
-  ],
-  "homepage": "https://github.com/collboard/function-builder#readme",
-  "main": "./src/index.ts",
-  "repository": {
-      "type": "git",
-      "url": "git+https://github.com/collboard/function-builder.git"
-  },
-  "bugs": {
-      "url": "https://github.com/collboard/function-builder/issues"
-  },
-  "scripts": {
-      "start": "colldev ",
-      "publish": "colldev publish"
-  },
-  "devDependencies": {
-      "@types/styled-components": "^4.4.1",
-      "@collboard/modules-sdk": "18.5.1",
-      "styled-components": "^4.4.1",
-      "mobx": "^5.15.6"
-  }
+    "name": "@collboard/function-builder",
+    "version": "1.0.0",
+    "description": "Project started at Robothon 2021 as a first external module for Collboard.com",
+    "contributors": [
+        "Pavol Hejný <me@pavolhejny.com> (https://pavolhejny.com)",
+        "Jonáš Rosecký <jonas.rosecky@h-edu.cz> (https://xrosecky.cz)",
+        "Alena Firchová <alena.firchova@h-edu.cz>"
+    ],
+    "homepage": "https://github.com/collboard/function-builder#readme",
+    "main": "./src/index.ts",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/collboard/function-builder.git"
+    },
+    "bugs": {
+        "url": "https://github.com/collboard/function-builder/issues"
+    },
+    "scripts": {
+        "start": "colldev ",
+        "publish": "colldev publish"
+    },
+    "devDependencies": {
+        "@types/styled-components": "^4.4.1",
+        "@collboard/modules-sdk": "18.5.1",
+        "styled-components": "^4.4.1",
+        "mobx": "^5.15.6"
+    }
 }
