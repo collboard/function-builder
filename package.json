@@ -18,8 +18,11 @@
         "url": "https://github.com/collboard/function-builder/issues"
     },
     "scripts": {
-        "start": "colldev ",
-        "publish": "colldev publish"
+        "start": "colldev develop",
+        "test": "colldev test",
+        "lint": "tslint -p tsconfig.json",
+        "preversion": "npm run lint && npm test",
+        "postversion": "git push && git push --tags"
     },
     "devDependencies": {
         "@collboard/modules-sdk": "18.7.0",
