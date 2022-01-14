@@ -1,7 +1,6 @@
 /* tslint:disable */
 /* TODO: Enable TSLint */
-import { MaterialArtVersioningSystem } from '../../../50-systems/ArtVersionSystem/0-MaterialArtVersioningSystem';
-import { AbstractArt } from '../../../71-arts/20-AbstractArt';
+import { AbstractArt, MaterialArtVersioningSystem } from '@collboard/modules-sdk';
 import { isFunctionBuilderFunction } from '../interfaces/FunctionBuilderFunction';
 import { FunctionBuilderArt } from '../modules/FunctionBuilderArtModule';
 
@@ -51,3 +50,7 @@ export function evaluate(
         ? art.functionDefinition.func(x, variables as { [key: string]: number })
         : art.functionDefinition.constant;
 }
+
+/**
+ * TODO: @hejny -> @roseckyj maybe use something like VM2
+ */

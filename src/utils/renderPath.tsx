@@ -12,7 +12,7 @@ function getBottomRightCorner(point1: IVectorDataObject, point2: IVectorDataObje
 
 // Recalculated relative points
 function getPointRelative(main: IVectorDataObject, additional: IVectorDataObject) {
-    return Vector.subtract(main, getTopLeftCorner(main, additional)).add(Vector.box(PADDING));
+    return Vector.subtract(main, getTopLeftCorner(main, additional)).add(Vector.square(PADDING));
 }
 
 function getPath(point1: IVectorDataObject, point2: IVectorDataObject) {

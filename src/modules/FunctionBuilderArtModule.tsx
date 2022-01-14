@@ -80,13 +80,13 @@ export class FunctionBuilderArt extends Abstract2dArt {
     // The size of BB is reduced because of the connection events (should be eventually fixed)
     get topLeftCorner() {
         if (!this.functionDefinition || isFunctionBuilderFunction(this.functionDefinition)) {
-            return Vector.add(this.shift, Vector.box(10));
+            return Vector.add(this.shift, Vector.square(10));
         } else {
-            return Vector.add(this.shift, Vector.box(10), new Vector(0, 90));
+            return Vector.add(this.shift, Vector.square(10), new Vector(0, 90));
         }
     }
     get bottomRightCorner() {
-        return Vector.subtract(Vector.add(this.shift, this.privateSize), Vector.box(10));
+        return Vector.subtract(Vector.add(this.shift, this.privateSize), Vector.square(10));
     }
 
     public get functionDefinition(): FunctionBuilderDefinition | null {
@@ -136,7 +136,7 @@ export class FunctionBuilderArt extends Abstract2dArt {
     private locateRef(target: React.RefObject<HTMLDivElement>, collSpace: CollSpace) {
         if (target && target.current) {
             const bb = target.current.getBoundingClientRect();
-            return collSpace.pickPoint(new Vector(bb.x, bb.y)).point.add(Vector.box(12)); // 12 is radius of circle
+            return collSpace.pickPoint(new Vector(bb.x, bb.y)).point.add(Vector.square(12)); // 12 is radius of circle
         }
         return Vector.add(this.shift, Vector.scale(this.privateSize, 0.5));
     }
