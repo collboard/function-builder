@@ -1,43 +1,28 @@
-import {
-    declareModule,
-    Icon,
-    makeIconModuleOnModule,
-    ToolbarName,
-    classNames,
-    Registration,
-    selectionToolDraggingBehavior,
-    selectionToolSelectionBoxBehavior,
-} from '@collboard/modules-sdk';
+import { declareModule, makeIconModuleOnModule, selectionToolBehavior, ToolbarName } from '@collboard/modules-sdk';
+import { Registration } from 'destroyable';
 import { observable } from 'mobx';
 import * as React from 'react';
-import styled from 'styled-components';
 import { Vector } from 'xyzt';
-import { Authors } from '../authors';
+import { contributors, description, license, repository, version } from '../../package.json';
 import { functionBuilderDefinitions } from '../definitions/functionBuilderDefinitions';
 import { FunctionBuilderConnectionArt } from '../utils/FunctionBuilderConnectionArt';
-import { functionBuilderFormatTitle } from '../utils/functionBuilderFormatTitle';
 import { GraphStateHolder } from '../utils/GraphStateHolder';
 import { FunctionBuilderArt } from './FunctionBuilderArtModule';
+import { FunctionBuilderMenu } from './FunctionBuilderMenu';
 
-const StyledTextIcon = styled.div`
-    padding: 5px 10px;
-    margin: 5px 5px;
-    border: solid 2px rgba(0, 0, 0, 0);
-    border-radius: 5px;
-    font-size: 0.8em;
-    cursor: pointer;
-    white-space: nowrap;
+export interface IFunctionBuilderToolInternalState {
+    selectedFunction: string;
+    manipulating: boolean;
+}
 
-    &.active {
-        border-color: #4e4e4e;
-    }
-`;
+/**
+ *
+ * Note: In future this file will we in independent repository as external state.
+ *
+ */
 
 declareModule(() => {
-    const state: {
-        selectedFunction: string;
-        manipulating: boolean;
-    } = observable({
+    const state: IFunctionBuilderToolInternalState = observable({
         selectedFunction: Object.keys(functionBuilderDefinitions)[0],
         manipulating: true,
     });
@@ -48,65 +33,43 @@ declareModule(() => {
 
     return makeIconModuleOnModule({
         manifest: {
-            flags: ['development', 'experimental'],
+            flags: { isDevelopment: true, isExperimental: true }, // ['development', 'experimental']
             name: 'FunctionBuilder',
             title: { en: 'Function Builder', cs: 'Nástroj na konstrukci funkcí' },
             /*description: {
             en: 'TODO',
             cs: 'TODO',
         },*/
-            keywords: [],
+
             categories: ['Math', 'Experimental' /* TODO: Probbably experimental should be flag or some dev stage */],
-            icon: '/assets/icons/group.svg', // TODO
-            screenshots: [
-                /*TODO:*/
-            ],
-            contributors: [Authors.rosecky, Authors.firchova, Authors.hejny],
+            icon: 'http://localhost:9980/icons/group.svg', // TODO
+
+            contributors,
+            description,
+            license,
+            repository,
+            version,
         },
         toolbar: ToolbarName.Tools,
         icon: {
             name: 'functionBuilder',
-            autoSelect: true,
-
             order: 61,
-            focusScope: 'tools',
-
             icon: 'group', // TODO
             boardCursor: 'default',
-            menu: () => (
-                <>
-                    <Icon
-                        icon="cursor"
-                        active={state.manipulating}
-                        onClick={() => {
-                            state.manipulating = true;
-                        }}
-                    />
-
-                    {/* TODO: add icons */}
-
-                    {Object.keys(functionBuilderDefinitions).map((funct, i) => (
-                        <StyledTextIcon
-                            className={classNames(!state.manipulating && state.selectedFunction === funct && 'active')}
-                            onClick={() => {
-                                state.selectedFunction = funct;
-                                state.manipulating = false;
-                            }}
-                            key={i}
-                        >
-                            {functionBuilderFormatTitle(functionBuilderDefinitions[funct])}
-                        </StyledTextIcon>
-                    ))}
-                </>
-            ),
+            menu: <FunctionBuilderMenu {...{ state }} />,
         },
         moduleActivatedByIcon: {
-            setup: (systemsContainer) => {
+            async setup(systems) {
                 const { touchController, virtualArtVersioningSystem, materialArtVersioningSystem, collSpace } =
-                    systemsContainer;
+                    await systems.request(
+                        'touchController',
+                        'virtualArtVersioningSystem',
+                        'materialArtVersioningSystem',
+                        'collSpace',
+                    );
 
                 return Registration.fromSubscription((registerAdditionalSubscription) =>
-                    touchController.touches.subscribe((touch) => {
+                    touchController.touches.subscribe(async (touch) => {
                         if (state.manipulating) {
                             // Dragging new connection
                             const overOutputs = materialArtVersioningSystem.artsPlaced.filter(
@@ -119,7 +82,7 @@ declareModule(() => {
                                 const source = overOutputs[0] as FunctionBuilderArt;
 
                                 const arrow = new FunctionBuilderConnectionArt(
-                                    source.getOutputPosition(systemsContainer),
+                                    source.getOutputPosition(collSpace),
                                     source.color,
                                 );
 
@@ -186,7 +149,7 @@ declareModule(() => {
                                 const source = possibleSources[0];
 
                                 const arrow = new FunctionBuilderConnectionArt(
-                                    source.getOutputPosition(systemsContainer),
+                                    source.getOutputPosition(systems),
                                     source.color,
                                 );
 
@@ -221,17 +184,11 @@ declareModule(() => {
                             }
 
                             // Dragging whole boxes (supply selection tool)
-                            //selectionToolBehavior({ registerAdditionalSubscription, systems: systemsContainer, touch });
-                            selectionToolDraggingBehavior({
+                            await selectionToolBehavior({
                                 registerAdditionalSubscription,
-                                systems: systemsContainer,
+                                systems,
                                 touch,
-                            }) ||
-                                selectionToolSelectionBoxBehavior({
-                                    registerAdditionalSubscription,
-                                    systems: systemsContainer,
-                                    touch,
-                                });
+                            });
                             return;
                         } else {
                             const pointOnBoard = collSpace.pickPoint(touch.firstFrame.position).point;

@@ -1,18 +1,19 @@
-/* tslint:disable */
-/* TODO: Enable TSLint */
 import {
     Abstract2dArt,
     AbstractArt,
     AsyncContentComponent,
+    CollSpace,
     declareModule,
     ISystems,
     makeArtModule,
+    MaterialArtVersioningSystem,
     promptDialogue,
+    Translate,
 } from '@collboard/modules-sdk';
 import * as React from 'react';
-import styled from 'styled-components';
 import { forAnimationFrame } from 'waitasecond';
-import { IVector, Vector } from 'xyzt';
+import { IVectorData, Vector } from 'xyzt';
+import { contributors, description, license, repository, version } from '../../package.json';
 import { CONNECTION_DOT_SNAPRADIUS, DEFAULT_PLOT_BOUNDINGBOX } from '../config';
 import { functionBuilderDefinitions } from '../definitions/functionBuilderDefinitions';
 import {
@@ -21,108 +22,29 @@ import {
     FunctionBuilderFunction,
     isFunctionBuilderFunction,
 } from '../interfaces/FunctionBuilderFunction';
+import '../style.css'; /* <- !!! Is this with ModulesSDK working? */
 import { functionBuilderFormatTitle } from '../utils/functionBuilderFormatTitle';
 import { GraphStateHolder } from '../utils/GraphStateHolder';
 import { plot } from '../utils/plot';
 import { renderPath } from '../utils/renderPath';
 
-const StyledArt = styled.div`
-    position: relative;
-    border-radius: 10px;
+declareModule(() => makeArtModule(FunctionBuilderArt));
 
-    /* Graph */
-    .graphWrapper {
-        position: absolute;
-        bottom: 7px;
-        left: 7px;
-        right: 7px;
-        height: 180px;
-        background: white;
-        border-radius: 5px;
-        padding: 7px;
-    }
-
-    .graphWrapper .graph {
-        background: white;
-    }
-
-    /* Title */
-    .functionTitle {
-        width: 230px;
-        text-align: center;
-        font-size: 1.8em;
-        font-weight: bold;
-        height: 90px;
-        vertical-align: middle;
-        display: table-cell;
-    }
-
-    .functionTitle input {
-        width: 110px;
-        text-align: center;
-        font-size: 1.2em;
-        font-weight: bold;
-        height: 90px;
-        vertical-align: middle;
-        display: table-cell;
-    }
-
-    /* I/O */
-    .inputs,
-    .outputs {
-        position: absolute;
-        top: 10px;
-        display: flex;
-        flex-direction: column;
-        height: 70px;
-        z-index: 1;
-    }
-
-    .inputs {
-        left: -10px;
-    }
-
-    .outputs {
-        right: -10px;
-    }
-
-    .inputs .connection,
-    .outputs .connection {
-        display: flex;
-        margin: auto 0;
-    }
-
-    .inputs .connection {
-        flex-direction: row;
-    }
-
-    .outputs .connection {
-        flex-direction: row-reverse;
-    }
-
-    .connectionPoint {
-        display: inline-block;
-        width: 24px;
-        height: 24px;
-        background: #f2f2f2;
-        border: solid 4px white;
-        border-radius: 100%;
-        pointer-events: all;
-    }
-
-    .functionBuilder-tool & .connectionPoint:hover {
-        border: solid 3px white;
-        cursor: pointer;
-    }
-
-    .connectionTitle {
-        margin: 0 8px;
-        line-height: 24px;
-        font-size: 0.9em;
-    }
-`;
+/* tslint:disable */
+/* TODO: Enable TSLint */
 
 export class FunctionBuilderArt extends Abstract2dArt {
+    public static serializeName = 'FunctionBuilder';
+    public static manifest = {
+        // Note+TODO: All modules should be in format @collboard/module-name but we started with art modules
+        name: '@collboard/function-builder-art',
+        contributors,
+        description,
+        license,
+        repository,
+        version,
+    };
+
     // __Underscored variables don't get serialized
     public __pointerOverOutput: boolean = false;
     public __pointerOverInput: { [key: string]: boolean } = {};
@@ -133,11 +55,11 @@ export class FunctionBuilderArt extends Abstract2dArt {
     private __lastPlotted: number = -1;
 
     public connections: { [key: string]: string | null };
-    private privateSize: IVector = new Vector(230, 280);
+    private privateSize: IVectorData = new Vector(230, 280);
     public color: string;
     public constant: number | null = null;
 
-    constructor(public shift: IVector, private funct: string) {
+    constructor(public shift: IVectorData, private funct: string) {
         super();
 
         this.color = GraphStateHolder.generateColor();
@@ -211,23 +133,27 @@ export class FunctionBuilderArt extends Abstract2dArt {
         }
     }
 
-    private locateRef(target: React.RefObject<HTMLDivElement>, systemsContainer: ISystems) {
+    private locateRef(target: React.RefObject<HTMLDivElement>, collSpace: CollSpace) {
         if (target && target.current) {
             const bb = target.current.getBoundingClientRect();
-            return systemsContainer.collSpace.pickPoint(new Vector(bb.x, bb.y)).point.add(Vector.box(12)); // 12 is radius of circle
+            return collSpace.pickPoint(new Vector(bb.x, bb.y)).point.add(Vector.box(12)); // 12 is radius of circle
         }
         return Vector.add(this.shift, Vector.scale(this.privateSize, 0.5));
     }
 
-    public getOutputPosition(systemsContainer: ISystems) {
-        return this.locateRef(this.__outputRef, systemsContainer);
+    public getOutputPosition(collSpace: CollSpace) {
+        return this.locateRef(this.__outputRef, collSpace);
     }
 
-    public getInputPosition(key: string, systemsContainer: ISystems) {
-        return this.locateRef(this.__inputRefs[key], systemsContainer);
+    public getInputPosition(key: string, collSpace: CollSpace) {
+        return this.locateRef(this.__inputRefs[key], collSpace);
     }
 
-    public evaluate(x: number, seenNodes: string[], systemsContainer: ISystems): number | null {
+    public evaluate(
+        x: number,
+        seenNodes: string[],
+        materialArtVersioningSystem: MaterialArtVersioningSystem,
+    ): number | null {
         if (seenNodes.includes(this.artId)) return null;
         if (!this.functionDefinition) return null;
 
@@ -238,7 +164,7 @@ export class FunctionBuilderArt extends Abstract2dArt {
                 return;
             }
 
-            const foundArts = systemsContainer.materialArtVersioningSystem.arts.filter(
+            const foundArts = materialArtVersioningSystem.arts.filter(
                 (art: AbstractArt) => art.artId === this.connections[key],
             );
             if (foundArts.length === 0) {
@@ -256,7 +182,7 @@ export class FunctionBuilderArt extends Abstract2dArt {
                 return;
             }
 
-            variables[key] = sources[key]!.evaluate(x, [...seenNodes, this.artId], systemsContainer);
+            variables[key] = sources[key]!.evaluate(x, [...seenNodes, this.artId], materialArtVersioningSystem);
         });
 
         if (Object.values(variables).reduce((prev, curr) => prev || curr === null, false)) return null;
@@ -268,7 +194,12 @@ export class FunctionBuilderArt extends Abstract2dArt {
         }
     }
 
-    render(_selected: boolean, systemsContainer: ISystems) {
+    async render(/* TODO: ✨ Add is prefix */ _selected: boolean, systems: ISystems) {
+        const { materialArtVersioningSystem, collSpace } = await systems.request(
+            'materialArtVersioningSystem',
+            'collSpace',
+        );
+
         if (Object.keys(this.connections).length !== Object.keys(this.__inputRefs).length) {
             if (this.functionDefinition && isFunctionBuilderFunction(this.functionDefinition)) {
                 Object.keys(this.functionDefinition.variables).forEach((variable) => {
@@ -284,7 +215,7 @@ export class FunctionBuilderArt extends Abstract2dArt {
                 return;
             }
 
-            const foundArts = systemsContainer.materialArtVersioningSystem.arts.filter(
+            const foundArts = materialArtVersioningSystem.arts.filter(
                 (art: AbstractArt) => art.artId === this.connections[key],
             );
             if (foundArts.length === 0) {
@@ -299,8 +230,8 @@ export class FunctionBuilderArt extends Abstract2dArt {
         });
 
         return (
-            <StyledArt
-                className="block"
+            <div
+                className="block functionBuilderArt"
                 style={{
                     width: this.privateSize.x || 0,
                     height: this.privateSize.y || 0,
@@ -330,7 +261,7 @@ export class FunctionBuilderArt extends Abstract2dArt {
                                 if (isNaN(+value)) return;
 
                                 // TODO: Creating opertions in arts (art is changing itself) should have nicer API
-                                systemsContainer.materialArtVersioningSystem
+                                materialArtVersioningSystem
                                     .createOperation('Change value of constant')
                                     .takeArts(this)
                                     .updateWithMutatingCallback((art) => {
@@ -368,10 +299,7 @@ export class FunctionBuilderArt extends Abstract2dArt {
                                     ref={this.__inputRefs[key]}
                                 />
                                 <div className="connectionTitle">
-                                    {systemsContainer.translationsSystem.translate(
-                                        'FunctionBuilderArt / Input',
-                                        'Vstup',
-                                    ) + ' '}
+                                    <Translate name={`FunctionBuilderArt / Input`}>Vstup</Translate>
                                     <i>
                                         {(this.functionDefinition as FunctionBuilderFunction).variables[key].title}{' '}
                                         {(this.functionDefinition as FunctionBuilderFunction).variables[key].note &&
@@ -397,7 +325,7 @@ export class FunctionBuilderArt extends Abstract2dArt {
                             style={{ background: this.color }}
                         />
                         <div className="connectionTitle">
-                            {systemsContainer.translationsSystem.translate('FunctionBuilderArt / Output', 'Výstup')}
+                            <Translate name={`FunctionBuilderArt / Output`}>Výstup</Translate>
                         </div>
                     </div>
                 </div>
@@ -415,7 +343,7 @@ export class FunctionBuilderArt extends Abstract2dArt {
                                 this.__lastPlotted = GraphStateHolder.lastPlotted;
                                 plot({
                                     canvas,
-                                    func: (x) => this.evaluate(x, [], systemsContainer),
+                                    func: (x) => this.evaluate(x, [], materialArtVersioningSystem),
                                     // func: (x) => Math.sin(x),
                                     boundingBox: DEFAULT_PLOT_BOUNDINGBOX,
                                     // TODO: objects: {},
@@ -425,6 +353,8 @@ export class FunctionBuilderArt extends Abstract2dArt {
                     />
                 </div>
                 <AsyncContentComponent
+                    alt="SVG with rendered graph"
+                    // TODO: Probbably put here loader={<></>}
                     content={async () => {
                         // Note: this is tiny hack to get connections in correct positions on initial load
                         await forAnimationFrame();
@@ -434,8 +364,8 @@ export class FunctionBuilderArt extends Abstract2dArt {
                                     .filter((key) => sources[key] !== null)
                                     .map((key) => {
                                         return renderPath(
-                                            sources[key]!.getOutputPosition(systemsContainer),
-                                            this.getInputPosition(key, systemsContainer),
+                                            sources[key]!.getOutputPosition(collSpace),
+                                            this.getInputPosition(key, collSpace),
                                             sources[key]!.color,
                                             undefined, // Here can be label
                                             this.shift,
@@ -446,9 +376,11 @@ export class FunctionBuilderArt extends Abstract2dArt {
                         );
                     }}
                 />
-            </StyledArt>
+            </div>
         );
     }
 }
 
-declareModule(makeArtModule({ name: 'SampleFunctionBuilder', class: FunctionBuilderArt }));
+/**
+ * TODO: Translations in (external) modules
+ */

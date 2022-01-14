@@ -9,6 +9,7 @@
         "downlevelIteration": true,
         "esModuleInterop": true,
         "resolveJsonModule": true,
+        "experimentalDecorators": true,
         "strict": true
     },
     "include": ["src"],

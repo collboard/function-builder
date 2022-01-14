@@ -1,4 +1,3 @@
-// TODOimport { translate } from '../../../50-systems/TranslationsSystem/translate';
 import { FunctionBuilderDefinition } from '../interfaces/FunctionBuilderFunction';
 
 export const functionBuilderDefinitions: { [key: string]: FunctionBuilderDefinition } = {
@@ -88,7 +87,7 @@ export const functionBuilderDefinitions: { [key: string]: FunctionBuilderDefinit
         variables: {
             base: {
                 // TODO: Differ shortcut vs full
-                title: 'b', // TODO:,translate(`FunctionBuilder / pow / base`, 'exponent'),
+                title: 'b', // TODO: <Translate name={`_____`}>_____</Translate> <Translate name={`FunctionBuilder / pow / base`}>exponent</Translate>,
             },
             a: {
                 title: 'a',
@@ -103,7 +102,7 @@ export const functionBuilderDefinitions: { [key: string]: FunctionBuilderDefinit
         title: 'log(  $base , $a )',
         variables: {
             base: {
-                title: 'b', // TODO:translate(`FunctionBuilder / log / base`, 'základ'),
+                title: 'b', // TODO: <Translate name={`_____`}>_____</Translate> <Translate name={`FunctionBuilder / log / base`}>základ</Translate>,
             },
             a: {
                 title: 'a',
@@ -118,7 +117,7 @@ export const functionBuilderDefinitions: { [key: string]: FunctionBuilderDefinit
         title: '<sup>$base</sup>√( $a )',
         variables: {
             base: {
-                title: 'b', // TODO:translate(`FunctionBuilder / wop / base`, 'základ'),
+                title: 'b', // TODO: <Translate name={`_____`}>_____</Translate> <Translate name={`FunctionBuilder / wop / base`}>základ</Translate>,
             },
             a: {
                 title: 'a',
@@ -354,3 +353,7 @@ export const functionBuilderDefinitions: { [key: string]: FunctionBuilderDefinit
     },
     */
 };
+
+/**
+ * TODO: Sekans + kosekans
+ */

@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* TODO: Enable TSLint */
-import { ISystems, AbstractArt } from '@collboard/modules-sdk';
+import { MaterialArtVersioningSystem } from '../../../50-systems/ArtVersionSystem/0-MaterialArtVersioningSystem';
+import { AbstractArt } from '../../../71-arts/20-AbstractArt';
 import { isFunctionBuilderFunction } from '../interfaces/FunctionBuilderFunction';
 import { FunctionBuilderArt } from '../modules/FunctionBuilderArtModule';
 
@@ -9,7 +10,7 @@ export function evaluate(
     art: FunctionBuilderArt,
     x: number,
     seenNodes: string[], // TODO: What this param menas
-    systemsContainer: ISystems,
+    materialArtVersioningSystem: MaterialArtVersioningSystem,
 ): number | null {
     if (seenNodes.includes(art.artId)) return null;
     if (!art.functionDefinition) return null;
@@ -21,7 +22,7 @@ export function evaluate(
             return;
         }
 
-        const foundArts = systemsContainer.materialArtVersioningSystem.arts.filter((art: AbstractArt) =>
+        const foundArts = materialArtVersioningSystem.arts.filter((art: AbstractArt) =>
             art.connections ? art.artId === art.connections[key] : false,
         );
         if (foundArts.length === 0) {
@@ -41,7 +42,7 @@ export function evaluate(
             return;
         }
 
-        variables[key] = sources[key]!.evaluate(x, [...seenNodes, art.artId], systemsContainer);
+        variables[key] = sources[key]!.evaluate(x, [...seenNodes, art.artId], materialArtVersioningSystem);
     });
 
     if (Object.values(variables).reduce((prev, curr) => prev || curr === null, false)) return null;

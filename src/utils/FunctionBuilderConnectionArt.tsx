@@ -1,11 +1,17 @@
 import { Abstract2dArt } from '@collboard/modules-sdk';
-import { IVector, Vector } from 'xyzt';
+import { IVectorData, Vector } from 'xyzt';
 import { renderPath } from './renderPath';
 
 export class FunctionBuilderConnectionArt extends Abstract2dArt {
-    public end: IVector;
+    public static serializeName = 'FunctionBuilderConnection';
+    public static manifest = {
+        // Note+TODO: All modules should be in format @collboard/module-name but we started with art modules
+        name: '@collboard/function-builder-connection-art',
+    };
 
-    constructor(public start: IVector, private color: string) {
+    public end: IVectorData;
+
+    constructor(public start: IVectorData, private color: string) {
         super();
         this.end = start;
     }

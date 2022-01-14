@@ -1,22 +1,21 @@
 import * as React from 'react';
-import styled from 'styled-components';
-import { IVectorObject, Vector } from 'xyzt';
+import { IVectorDataObject, Vector } from 'xyzt';
 
 const PADDING = 30;
 
-function getTopLeftCorner(point1: IVectorObject, point2: IVectorObject) {
+function getTopLeftCorner(point1: IVectorDataObject, point2: IVectorDataObject) {
     return new Vector(Math.min(point1.x!, point2.x!), Math.min(point1.y!, point2.y!));
 }
-function getBottomRightCorner(point1: IVectorObject, point2: IVectorObject) {
+function getBottomRightCorner(point1: IVectorDataObject, point2: IVectorDataObject) {
     return new Vector(Math.max(point1.x!, point2.x!), Math.max(point1.y!, point2.y!));
 }
 
 // Recalculated relative points
-function getPointRelative(main: IVectorObject, additional: IVectorObject) {
+function getPointRelative(main: IVectorDataObject, additional: IVectorDataObject) {
     return Vector.subtract(main, getTopLeftCorner(main, additional)).add(Vector.box(PADDING));
 }
 
-function getPath(point1: IVectorObject, point2: IVectorObject) {
+function getPath(point1: IVectorDataObject, point2: IVectorDataObject) {
     const point1Relative = getPointRelative(point1, point2);
     const point2Relative = getPointRelative(point2, point1);
 
@@ -34,25 +33,12 @@ function getPath(point1: IVectorObject, point2: IVectorObject) {
     ].join(' ');
 }
 
-const StyledConnection = styled.svg`
-    position: absolute;
-    pointer-events: none;
-    z-index: 1;
-
-    * {
-        stroke-width: 3px;
-        stroke: black;
-        fill: none;
-        pointer-events: none;
-    }
-`;
-
 export function renderPath(
-    point1: IVectorObject,
-    point2: IVectorObject,
+    point1: IVectorDataObject,
+    point2: IVectorDataObject,
     color: string,
     label?: string,
-    unshift: IVectorObject = Vector.zero(),
+    unshift: IVectorDataObject = Vector.zero(),
     key?: string | number,
 ) {
     const path = getPath(point1, point2);
@@ -60,7 +46,7 @@ export function renderPath(
     const bottomRight = getBottomRightCorner(point1, point2);
 
     return (
-        <StyledConnection
+        <svg
             style={{
                 width: bottomRight.subtract(topLeft).x + 2 * PADDING,
                 height: bottomRight.subtract(topLeft).y + 2 * PADDING,
@@ -105,6 +91,6 @@ export function renderPath(
                         {label}
                     </text>
                 ))}
-        </StyledConnection>
+        </svg>
     );
 }
