@@ -8,9 +8,9 @@ import {
     makeArtModule,
     MaterialArtVersioningSystem,
     promptDialogue,
+    React,
     Translate,
 } from '@collboard/modules-sdk';
-import * as React from 'react';
 import { forAnimationFrame } from 'waitasecond';
 import { IVectorData, Vector } from 'xyzt';
 import { contributors, description, license, repository, version } from '../../package.json';
@@ -27,8 +27,6 @@ import { functionBuilderFormatTitle } from '../utils/functionBuilderFormatTitle'
 import { GraphStateHolder } from '../utils/GraphStateHolder';
 import { plot } from '../utils/plot';
 import { renderPath } from '../utils/renderPath';
-
-declareModule(() => makeArtModule(FunctionBuilderArt));
 
 /* tslint:disable */
 /* TODO: Enable TSLint */
@@ -380,6 +378,8 @@ export class FunctionBuilderArt extends Abstract2dArt {
         );
     }
 }
+
+declareModule(makeArtModule(FunctionBuilderArt));
 
 /**
  * TODO: Translations in (external) modules

@@ -22,12 +22,12 @@
         "publish": "colldev publish"
     },
     "devDependencies": {
-        "@collboard/modules-sdk": "18.5.104",
+        "@collboard/modules-sdk": "18.5.107",
         "@types/styled-components": "^4.4.1",
-        "mobx": "^5.15.6",
-        "mobx-react": "^7.2.1",
+        "rxjs": "^7.5.2",
         "styled-components": "^4.4.1",
         "waitasecond": "^1.8.10",
         "xyzt": "^4.7.0"
-    }
+    },
+    "dependencies": {}
 }

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { React } from '@collboard/modules-sdk';
 import { IVectorDataObject, Vector } from 'xyzt';
 
 const PADDING = 30;

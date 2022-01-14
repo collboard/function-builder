@@ -1,44 +1,48 @@
-import { classNames, Icon } from '@collboard/modules-sdk';
-import { observer } from 'mobx-react';
-import * as React from 'react';
+import { classNames, Icon, ObservableContentComponent, React } from '@collboard/modules-sdk';
+import { map, Subject } from 'rxjs';
 import { functionBuilderDefinitions } from '../definitions/functionBuilderDefinitions';
 import { functionBuilderFormatTitle } from '../utils/functionBuilderFormatTitle';
 import { IFunctionBuilderToolInternalState } from './FunctionBuilderTool';
 
-@observer
-export class FunctionBuilderMenu extends React.Component<{ state: IFunctionBuilderToolInternalState }> {
-    render() {
-        const { state } = this.props;
-        return (
-            <>
-                <Icon
-                    icon="cursor"
-                    active={state.manipulating}
-                    onClick={() => {
-                        state.manipulating = true;
-                    }}
-                />
+interface IFunctionBuilderMenuProps {
+    state: Subject<IFunctionBuilderToolInternalState>;
+}
 
-                {/* TODO: add icons */}
-
-                {Object.keys(functionBuilderDefinitions).map((funct) => (
-                    <div
-                        key={funct}
-                        className={classNames(
-                            'textIcon',
-                            !state.manipulating && state.selectedFunction === funct && 'active',
-                        )}
-                        onClick={() => {
-                            state.selectedFunction = funct;
-                            state.manipulating = false;
-                        }}
-                    >
-                        {functionBuilderFormatTitle(functionBuilderDefinitions[funct])}
-                    </div>
-                ))}
-            </>
-        );
-    }
+export function FunctionBuilderMenu({ state }: IFunctionBuilderMenuProps) {
+    return (
+        <ObservableContentComponent
+            alt="Function Builder Menu"
+            content={(state as any).pipe(
+                map((stateValue: IFunctionBuilderToolInternalState) => (
+                    <>
+                        <Icon
+                            icon="cursor"
+                            active={stateValue.manipulating}
+                            onClick={() => {
+                                state.next({ ...stateValue, manipulating: true });
+                            }}
+                        />
+                        {/* TODO: add icons */}
+                        {Object.keys(functionBuilderDefinitions).map((funct) => (
+                            <div
+                                key={funct}
+                                className={classNames(
+                                    'textIcon',
+                                    !stateValue.manipulating && stateValue.selectedFunction === funct && 'active',
+                                )}
+                                onClick={() => {
+                                    stateValue.selectedFunction = funct;
+                                    stateValue.manipulating = false;
+                                }}
+                            >
+                                {functionBuilderFormatTitle(functionBuilderDefinitions[funct])}
+                            </div>
+                        ))}
+                    </>
+                )),
+            )}
+        />
+    );
 }
 
 /**

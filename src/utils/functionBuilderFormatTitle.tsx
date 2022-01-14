@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { React } from '@collboard/modules-sdk';
 import { FunctionBuilderDefinition, isFunctionBuilderFunction } from '../interfaces/FunctionBuilderFunction';
 
 export function functionBuilderFormatTitle(definition: FunctionBuilderDefinition): JSX.Element {

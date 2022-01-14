@@ -1,7 +1,12 @@
-import { declareModule, makeIconModuleOnModule, selectionToolBehavior, ToolbarName } from '@collboard/modules-sdk';
+import {
+    declareModule,
+    makeIconModuleOnModule,
+    React,
+    selectionToolBehavior,
+    ToolbarName,
+} from '@collboard/modules-sdk';
 import { Registration } from 'destroyable';
-import { observable } from 'mobx';
-import * as React from 'react';
+import { BehaviorSubject } from 'rxjs';
 import { Vector } from 'xyzt';
 import { contributors, description, license, repository, version } from '../../package.json';
 import { functionBuilderDefinitions } from '../definitions/functionBuilderDefinitions';
@@ -22,28 +27,23 @@ export interface IFunctionBuilderToolInternalState {
  */
 
 declareModule(() => {
-    const state: IFunctionBuilderToolInternalState = observable({
+    const state = new BehaviorSubject<IFunctionBuilderToolInternalState>({
         selectedFunction: Object.keys(functionBuilderDefinitions)[0],
         manipulating: true,
     });
 
     async function activateSelectionTool() {
-        state.manipulating = true;
+        state.next({ ...state.value, manipulating: true });
     }
 
     return makeIconModuleOnModule({
         manifest: {
             flags: { isDevelopment: true, isExperimental: true }, // ['development', 'experimental']
-            name: 'FunctionBuilder',
+            name: '@collboard/function-builder-tool',
+            deprecatedNames: ['FunctionBuilder'],
             title: { en: 'Function Builder', cs: 'Nástroj na konstrukci funkcí' },
-            /*description: {
-            en: 'TODO',
-            cs: 'TODO',
-        },*/
-
             categories: ['Math', 'Experimental' /* TODO: Probbably experimental should be flag or some dev stage */],
-            icon: 'http://localhost:9980/icons/group.svg', // TODO
-
+            // icon: 'http://localhost:9980/icons/group.svg', // TODO !!!
             contributors,
             description,
             license,
@@ -70,7 +70,7 @@ declareModule(() => {
 
                 return Registration.fromSubscription((registerAdditionalSubscription) =>
                     touchController.touches.subscribe(async (touch) => {
-                        if (state.manipulating) {
+                        if (state.value.manipulating) {
                             // Dragging new connection
                             const overOutputs = materialArtVersioningSystem.artsPlaced.filter(
                                 (art) =>
@@ -195,7 +195,7 @@ declareModule(() => {
 
                             const newArt = new FunctionBuilderArt(
                                 pointOnBoard.subtract(new Vector(115, 140)),
-                                state.selectedFunction,
+                                state.value.selectedFunction,
                             );
 
                             const operation = materialArtVersioningSystem.createPrimaryOperation();
@@ -210,3 +210,7 @@ declareModule(() => {
         },
     });
 });
+
+/**
+ * TODO: Raname module files as the module
+ */
