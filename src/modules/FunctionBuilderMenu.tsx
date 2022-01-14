@@ -45,6 +45,7 @@ export function FunctionBuilderMenu({ state }: IFunctionBuilderMenuProps) {
 }
 
 /**
+ * TODO: !!! Import all important libraries from @collboard/modules-sdk
  * TODO: This is not module but a component - move to other folder
  * TODO: @hejny -> @rosecky Fix design of menu
  */
