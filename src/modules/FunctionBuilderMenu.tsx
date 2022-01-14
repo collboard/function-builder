@@ -46,4 +46,5 @@ export function FunctionBuilderMenu({ state }: IFunctionBuilderMenuProps) {
 
 /**
  * TODO: This is not module but a component - move to other folder
+ * TODO: @hejny -> @rosecky Fix design of menu
  */
