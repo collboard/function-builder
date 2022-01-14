@@ -31,8 +31,7 @@ export function FunctionBuilderMenu({ state }: IFunctionBuilderMenuProps) {
                                     !stateValue.manipulating && stateValue.selectedFunction === funct && 'active',
                                 )}
                                 onClick={() => {
-                                    stateValue.selectedFunction = funct;
-                                    stateValue.manipulating = false;
+                                    state.next({ ...stateValue, selectedFunction: funct, manipulating: false });
                                 }}
                             >
                                 {functionBuilderFormatTitle(functionBuilderDefinitions[funct])}
