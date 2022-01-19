@@ -25,7 +25,7 @@
         "postversion": "git push && git push --tags"
     },
     "devDependencies": {
-        "@collboard/modules-sdk": "18.11.0",
+        "@collboard/modules-sdk": "18.11.1",
         "@types/styled-components": "^4.4.1",
         "rxjs": "^7.5.2",
         "styled-components": "^4.4.1",
