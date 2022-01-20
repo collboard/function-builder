@@ -1,6 +1,6 @@
 {
     "name": "@collboard/function-builder",
-    "version": "1.1.8",
+    "version": "1.1.9",
     "description": "Project started at Robothon 2021 as a first external module for Collboard.com",
     "license": "SEE LICENSE IN LICENSE",
     "contributors": [
