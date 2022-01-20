@@ -1,11 +1,12 @@
 # 📈 Collboard function builder
 
-
+<!--Badges-->
 [![License](https://img.shields.io/github/license/collboard/function-builder.svg?style=flat)](https://raw.githubusercontent.com/collboard/function-builder/master/LICENSE)
 [![Test](https://github.com/collboard/function-builder/actions/workflows/test.yml/badge.svg)](https://github.com/collboard/function-builder/actions/workflows/test.yml)
 [![Lint](https://github.com/collboard/function-builder/actions/workflows/lint.yml/badge.svg)](https://github.com/collboard/function-builder/actions/workflows/lint.yml)
 [![Known Vulnerabilities](https://snyk.io/test/github/collboard/function-builder/badge.svg)](https://snyk.io/test/github/collboard/function-builder)
 [![Issues](https://img.shields.io/github/issues/collboard/function-builder.svg?style=flat)](https://github.com/collboard/function-builder/issues)
+<!--/Badges-->
 
 Function builder was created at hackathon Robothon 2021 as a **first external module** for [Collboard.com](https://www.npmjs.com/package/@collboard/modules-sdk/)
 
