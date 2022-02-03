@@ -22,13 +22,7 @@ Function builder was created at hackathon Robothon 2021 as a **first external mo
 
 
 
-<!--Contributing-->
 
-## 🖋️ Contributing
-
-I am open to pull requests, feedback, and suggestions. Or if you like this utility, you can [☕ buy me a coffee](https://www.buymeacoffee.com/hejny) or [donate via cryptocurrencies](https://github.com/hejny/hejny/blob/main/documents/crypto.md).
-
-<!--/Contributing-->
 
 
 <!--Partners-->
