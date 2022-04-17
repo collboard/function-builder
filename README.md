@@ -5,10 +5,10 @@
 
 
 [![License of 📈 Collboard function builder](https://img.shields.io/github/license/collboard/function-builder.svg?style=flat)](https://github.com/collboard/function-builder/blob/main/LICENSE)
+[![lint](https://github.com/collboard/function-builder/actions/workflows/lint.yml/badge.svg)](https://github.com/collboard/function-builder/actions/workflows/lint.yml)
+[![test](https://github.com/collboard/function-builder/actions/workflows/test.yml/badge.svg)](https://github.com/collboard/function-builder/actions/workflows/test.yml)
 [![Known Vulnerabilities](https://snyk.io/test/github/collboard/function-builder/badge.svg)](https://snyk.io/test/github/collboard/function-builder)
 [![Issues](https://img.shields.io/github/issues/collboard/function-builder.svg?style=flat)](https://github.com/collboard/function-builder/issues)
-<!--[![lint](https://github.com/collboard/function-builder/actions/workflows/lint.yml/badge.svg)](https://github.com/collboard/function-builder/actions/workflows/lint.yml)-->
-<!--[![test](https://github.com/collboard/function-builder/actions/workflows/test.yml/badge.svg)](https://github.com/collboard/function-builder/actions/workflows/test.yml)-->
 
 <!--/Badges-->
 
