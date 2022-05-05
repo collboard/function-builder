@@ -12,7 +12,7 @@
   "main": "./src/index.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/collboard/function-builder.git"
+    "url": "https://github.com/collboard/function-builder"
   },
   "bugs": {
     "url": "https://github.com/collboard/function-builder/issues"
