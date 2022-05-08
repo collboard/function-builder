@@ -1,21 +1,21 @@
 import { React } from '@collboard/modules-sdk';
-import { IVectorDataObject, Vector } from 'xyzt';
+import { IVectorData, Vector } from 'xyzt';
 
 const PADDING = 30;
 
-function getTopLeftCorner(point1: IVectorDataObject, point2: IVectorDataObject) {
+function getTopLeftCorner(point1: IVectorData, point2: IVectorData) {
     return new Vector(Math.min(point1.x!, point2.x!), Math.min(point1.y!, point2.y!));
 }
-function getBottomRightCorner(point1: IVectorDataObject, point2: IVectorDataObject) {
+function getBottomRightCorner(point1: IVectorData, point2: IVectorData) {
     return new Vector(Math.max(point1.x!, point2.x!), Math.max(point1.y!, point2.y!));
 }
 
 // Recalculated relative points
-function getPointRelative(main: IVectorDataObject, additional: IVectorDataObject) {
+function getPointRelative(main: IVectorData, additional: IVectorData) {
     return Vector.subtract(main, getTopLeftCorner(main, additional)).add(Vector.square(PADDING));
 }
 
-function getPath(point1: IVectorDataObject, point2: IVectorDataObject) {
+function getPath(point1: IVectorData, point2: IVectorData) {
     const point1Relative = getPointRelative(point1, point2);
     const point2Relative = getPointRelative(point2, point1);
 
@@ -34,11 +34,11 @@ function getPath(point1: IVectorDataObject, point2: IVectorDataObject) {
 }
 
 export function renderPath(
-    point1: IVectorDataObject,
-    point2: IVectorDataObject,
+    point1: IVectorData,
+    point2: IVectorData,
     color: string,
     label?: string,
-    unshift: IVectorDataObject = Vector.zero(),
+    unshift: IVectorData = Vector.zero(),
     key?: string | number,
 ) {
     const path = getPath(point1, point2);
