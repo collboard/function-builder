@@ -82,7 +82,7 @@ declareModule(() => {
                                 const source = overOutputs[0] as FunctionBuilderArt;
 
                                 const arrow = new FunctionBuilderConnectionArt(
-                                    source.getOutputPosition(collSpace),
+                                    await source.getOutputPosition(collSpace),
                                     source.color,
                                 );
 
@@ -91,11 +91,11 @@ declareModule(() => {
                                     .newArts(arrow);
 
                                 touch.frames.subscribe({
-                                    next: (touchFrame) => {
-                                        arrow.end = collSpace.pickPoint(touchFrame.position).point;
+                                    async next(touchFrame) {
+                                        arrow.end = (await collSpace.pickPoint(touchFrame.position)).point;
                                         arrowAsVirtualArt.update(arrow);
                                     },
-                                    complete: () => {
+                                    complete() {
                                         const toUpdate = materialArtVersioningSystem.artsPlaced.filter(
                                             (art) => art instanceof FunctionBuilderArt,
                                         );
@@ -149,7 +149,7 @@ declareModule(() => {
                                 const source = possibleSources[0];
 
                                 const arrow = new FunctionBuilderConnectionArt(
-                                    source.getOutputPosition(systems),
+                                    await source.getOutputPosition(systems),
                                     source.color,
                                 );
 
@@ -157,11 +157,11 @@ declareModule(() => {
                                     .createPrimaryOperation()
                                     .newArts(arrow);
                                 touch.frames.subscribe({
-                                    next: (touchFrame) => {
-                                        arrow.end = collSpace.pickPoint(touchFrame.position).point;
+                                    async next(touchFrame) {
+                                        arrow.end = (await collSpace.pickPoint(touchFrame.position)).point;
                                         arrowAsVirtualArt.update(arrow);
                                     },
-                                    complete: () => {
+                                    complete() {
                                         const toUpdate = materialArtVersioningSystem.artsPlaced.filter(
                                             (art) => art instanceof FunctionBuilderArt,
                                         );
@@ -191,7 +191,7 @@ declareModule(() => {
                             });
                             return;
                         } else {
-                            const pointOnBoard = collSpace.pickPoint(touch.firstFrame.position).point;
+                            const pointOnBoard = (await collSpace.pickPoint(touch.firstFrame.position)).point;
 
                             const newArt = new FunctionBuilderArt(
                                 pointOnBoard.subtract(new Vector(115, 140)),

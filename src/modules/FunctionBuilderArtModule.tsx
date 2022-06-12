@@ -131,20 +131,20 @@ export class FunctionBuilderArt extends Abstract2dArt {
         }
     }
 
-    private locateRef(target: React.RefObject<HTMLDivElement>, collSpace: CollSpace) {
+    private async locateRef(target: React.RefObject<HTMLDivElement>, collSpace: CollSpace) {
         if (target && target.current) {
             const bb = target.current.getBoundingClientRect();
-            return collSpace.pickPoint(new Vector(bb.x, bb.y)).point.add(Vector.square(12)); // 12 is radius of circle
+            return (await collSpace.pickPoint(new Vector(bb.x, bb.y))).point.add(Vector.square(12)); // 12 is radius of circle
         }
         return Vector.add(this.shift, Vector.scale(this.privateSize, 0.5));
     }
 
-    public getOutputPosition(collSpace: CollSpace) {
-        return this.locateRef(this.__outputRef, collSpace);
+    public async getOutputPosition(collSpace: CollSpace) {
+        return await this.locateRef(this.__outputRef, collSpace);
     }
 
-    public getInputPosition(key: string, collSpace: CollSpace) {
-        return this.locateRef(this.__inputRefs[key], collSpace);
+    public async getInputPosition(key: string, collSpace: CollSpace) {
+        return await this.locateRef(this.__inputRefs[key], collSpace);
     }
 
     public evaluate(
@@ -358,18 +358,20 @@ export class FunctionBuilderArt extends Abstract2dArt {
                         await forAnimationFrame();
                         return (
                             <>
-                                {Object.keys(sources)
-                                    .filter((key) => sources[key] !== null)
-                                    .map((key) => {
-                                        return renderPath(
-                                            sources[key]!.getOutputPosition(collSpace),
-                                            this.getInputPosition(key, collSpace),
-                                            sources[key]!.color,
-                                            undefined, // Here can be label
-                                            this.shift,
-                                            key,
-                                        );
-                                    })}
+                                {await Promise.all(
+                                    Object.keys(sources)
+                                        .filter((key) => sources[key] !== null)
+                                        .map(async (key) => {
+                                            return renderPath(
+                                                await sources[key]!.getOutputPosition(collSpace),
+                                                await this.getInputPosition(key, collSpace),
+                                                sources[key]!.color,
+                                                undefined, // Here can be label
+                                                this.shift,
+                                                key,
+                                            );
+                                        }),
+                                )}
                             </>
                         );
                     }}
