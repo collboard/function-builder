@@ -2,6 +2,8 @@ import { React } from '@collboard/modules-sdk';
 import { FunctionBuilderDefinition, isFunctionBuilderFunction } from '../interfaces/FunctionBuilderFunction';
 
 export function functionBuilderFormatTitle(definition: FunctionBuilderDefinition): JSX.Element {
+    console.log(`Artificially introducing lint problem to test auto-update module mechanism`);
+
     const raw = definition.title;
 
     if (!isFunctionBuilderFunction(definition)) {
