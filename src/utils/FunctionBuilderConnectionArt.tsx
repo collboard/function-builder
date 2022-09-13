@@ -21,10 +21,10 @@ export class FunctionBuilderConnectionArt extends Abstract2dArt {
     defaultZIndex = 9;
 
     // Just to extend correctly, this is unnecessary
-    get topLeftCorner() {
+    get topLeft() {
         return new Vector(Math.min(this.start.x!, this.end.x!), Math.min(this.start.y!, this.end.y!));
     }
-    get bottomRightCorner() {
+    get bottomRight() {
         return new Vector(Math.max(this.start.x!, this.end.x!), Math.max(this.start.y!, this.end.y!));
     }
 

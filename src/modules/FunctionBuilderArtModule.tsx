@@ -76,14 +76,14 @@ export class FunctionBuilderArt extends Abstract2dArt {
     acceptedAttributes = [];
 
     // The size of BB is reduced because of the connection events (should be eventually fixed)
-    get topLeftCorner() {
+    get topLeft() {
         if (!this.functionDefinition || isFunctionBuilderFunction(this.functionDefinition)) {
             return Vector.add(this.shift, Vector.square(10));
         } else {
             return Vector.add(this.shift, Vector.square(10), new Vector(0, 90));
         }
     }
-    get bottomRightCorner() {
+    get bottomRight() {
         return Vector.subtract(Vector.add(this.shift, this.privateSize), Vector.square(10));
     }
 
