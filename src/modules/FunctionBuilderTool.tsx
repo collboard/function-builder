@@ -8,6 +8,7 @@ import {
 import { Registration } from 'destroyable';
 import { BehaviorSubject } from 'rxjs';
 import { Vector } from 'xyzt';
+import icon from '../../assets/icon.png';
 import { contributors, description, license, repository, version } from '../../package.json';
 import { functionBuilderDefinitions } from '../definitions/functionBuilderDefinitions';
 import { FunctionBuilderConnectionArt } from '../utils/FunctionBuilderConnectionArt';
@@ -43,7 +44,7 @@ declareModule(() => {
             deprecatedNames: ['FunctionBuilder'],
             title: { en: 'Function Builder', cs: 'Nástroj na konstrukci funkcí' },
             categories: ['Math', 'Experimental' /* TODO: Probbably experimental should be flag or some dev stage */],
-            // icon: 'http://localhost:9980/icons/group.svg', // TODO !!!
+            icon,
             contributors,
             description,
             license,
