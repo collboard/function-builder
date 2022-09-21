@@ -1,6 +1,7 @@
 import { classNames, Icon, ObservableContentComponent, React } from '@collboard/modules-sdk';
 import { map, Subject } from 'rxjs';
 import { functionBuilderDefinitions } from '../definitions/functionBuilderDefinitions';
+import { TextIconStyle } from '../styles/TextIconStyle';
 import { functionBuilderFormatTitle } from '../utils/functionBuilderFormatTitle';
 import { IFunctionBuilderToolInternalState } from './FunctionBuilderTool';
 
@@ -24,10 +25,9 @@ export function FunctionBuilderMenu({ state }: IFunctionBuilderMenuProps) {
                         />
                         {/* TODO: add icons */}
                         {Object.keys(functionBuilderDefinitions).map((funct) => (
-                            <div
+                            <TextIconStyle
                                 key={funct}
                                 className={classNames(
-                                    'textIcon',
                                     !stateValue.manipulating && stateValue.selectedFunction === funct && 'active',
                                 )}
                                 onClick={() => {
@@ -35,7 +35,7 @@ export function FunctionBuilderMenu({ state }: IFunctionBuilderMenuProps) {
                                 }}
                             >
                                 {functionBuilderFormatTitle(functionBuilderDefinitions[funct])}
-                            </div>
+                            </TextIconStyle>
                         ))}
                     </>
                 )),

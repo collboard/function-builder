@@ -1,5 +1,6 @@
 import { React } from '@collboard/modules-sdk';
 import { IVectorData, Vector } from 'xyzt';
+import { FunctionBuilderConnectionStyle } from '../styles/FunctionBuilderConnectionStyle';
 
 const PADDING = 30;
 
@@ -46,14 +47,14 @@ export function renderPath(
     const bottomRight = getBottomRightCorner(point1, point2);
 
     return (
-        <svg
+        <FunctionBuilderConnectionStyle
             style={{
                 width: bottomRight.subtract(topLeft).x + 2 * PADDING,
                 height: bottomRight.subtract(topLeft).y + 2 * PADDING,
                 left: topLeft.x - unshift.x! - PADDING,
                 top: topLeft.y - unshift.y! - PADDING,
             }}
-            className="functionBuilderConnection"
+
             key={key}
         >
             <path d={path} style={{ stroke: color }} />
@@ -91,6 +92,6 @@ export function renderPath(
                         {label}
                     </text>
                 ))}
-        </svg>
+        </FunctionBuilderConnectionStyle>
     );
 }

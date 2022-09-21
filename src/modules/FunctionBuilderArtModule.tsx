@@ -1,15 +1,15 @@
 import {
-  Abstract2dArt,
-  AbstractArt,
-  AsyncContentComponent,
-  CollSpace,
-  declareModule,
-  ISystems,
-  makeArtModule,
-  MaterialArtVersioningSystem,
-  promptDialogue,
-  React,
-  Translate
+    Abstract2dArt,
+    AbstractArt,
+    AsyncContentComponent,
+    CollSpace,
+    declareModule,
+    ISystems,
+    makeArtModule,
+    MaterialArtVersioningSystem,
+    promptDialogue,
+    React,
+    Translate,
 } from '@collboard/modules-sdk';
 import { forAnimationFrame } from 'waitasecond';
 import { IVectorData, Vector } from 'xyzt';
@@ -17,12 +17,12 @@ import { contributors, description, license, repository, version } from '../../p
 import { CONNECTION_DOT_SNAPRADIUS, DEFAULT_PLOT_BOUNDINGBOX } from '../config';
 import { functionBuilderDefinitions } from '../definitions/functionBuilderDefinitions';
 import {
-  FunctionBuilderConstant,
-  FunctionBuilderDefinition,
-  FunctionBuilderFunction,
-  isFunctionBuilderFunction
+    FunctionBuilderConstant,
+    FunctionBuilderDefinition,
+    FunctionBuilderFunction,
+    isFunctionBuilderFunction,
 } from '../interfaces/FunctionBuilderFunction';
-import '../style.css';
+import { FunctionBuilderArtStyle } from '../styles/FunctionBuilderArtStyle';
 import { functionBuilderFormatTitle } from '../utils/functionBuilderFormatTitle';
 import { GraphStateHolder } from '../utils/GraphStateHolder';
 import { plot } from '../utils/plot';
@@ -228,8 +228,8 @@ export class FunctionBuilderArt extends Abstract2dArt {
         });
 
         return (
-            <div
-                className="block functionBuilderArt"
+            <FunctionBuilderArtStyle
+                className="block"
                 style={{
                     width: this.privateSize.x || 0,
                     height: this.privateSize.y || 0,
@@ -376,7 +376,7 @@ export class FunctionBuilderArt extends Abstract2dArt {
                         );
                     }}
                 />
-            </div>
+            </FunctionBuilderArtStyle>
         );
     }
 }
