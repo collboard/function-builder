@@ -1,8 +1,8 @@
 import {
+    createSelectionToolBehavior,
     declareModule,
     makeIconModuleOnModule,
     React,
-    selectionToolBehavior,
     ToolbarName,
 } from '@collboard/modules-sdk';
 import { Registration } from 'destroyable';
@@ -68,6 +68,8 @@ declareModule(() => {
                         'materialArtVersioningSystem',
                         'collSpace',
                     );
+
+                const selectionToolBehavior = await createSelectionToolBehavior();
 
                 return Registration.fromSubscription((registerAdditionalSubscription) =>
                     touchController.touches.subscribe(async (touch) => {
