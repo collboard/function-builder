@@ -1,9 +1,9 @@
 import {
-    createSelectionToolBehavior,
-    declareModule,
-    makeIconModuleOnModule,
-    React,
-    ToolbarName,
+  createSelectionToolBehavior,
+  declareModule,
+  makeIconModuleOnModule,
+  React,
+  ToolbarName
 } from '@collboard/modules-sdk';
 import { Registration } from 'destroyable';
 import { BehaviorSubject } from 'rxjs';
