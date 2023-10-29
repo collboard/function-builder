@@ -1,6 +1,6 @@
 {
     "name": "@collboard/function-builder",
-    "version": "1.3.74",
+    "version": "1.3.75",
     "description": "Function builder was created at hackathon Robothon 2021 as a first external module for Collboard.com",
     "license": "SEE LICENSE IN LICENSE",
     "contributors": [
